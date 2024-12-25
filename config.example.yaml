@@ -1,0 +1,62 @@
+# MySQL配置
+database:
+  host: localhost
+  port: 3306
+  user: root
+  password: password
+  database: dify_sync
+
+# GitHub配置
+github:
+  pat: "your-github-pat-token"  # GitHub Personal Access Token
+
+# Dify配置
+dify:
+  api_key: "your-api-key"
+  base_url: "https://api.dify.ai/v1"
+  
+
+# 错误通知配置 (尚未测试过该功能)
+notifications:
+  smtp:
+    enabled: true
+    host: smtp.gmail.com
+    port: 587
+    username: your-email@gmail.com
+    password: your-password
+    recipients:
+      - admin@example.com
+  webhook:
+    enabled: true
+    url: "https://your-webhook-url"
+    method: "GET"  # 或 "POST"
+
+
+# 仓库映射配置
+mapping:
+  - name: "docs-repo"
+    github:
+      owner: "owner"
+      repo: "repo"
+      branch: "main"
+      path: "docs"  # 可选,仅同步特定目录
+      webhook_path: "/github/docs-repo" # 由GitHub Webhook配置的路径
+      webhook_secret: "your-webhook-secret" # 由GitHub Webhook配置的Secret
+    dify:
+      dateset_id: "your-dataset-id" # Dify数据集ID，在创建后获取，web界面的URL中可以找到
+      indexing_technique: "high_quality" # 我觉得你也不会选择低质量吧，自己看文档去
+      process_rule:
+        mode: "automatic"  # 或 "custom"
+        rules:  # 当mode为custom时需要
+          pre_processing_rules:
+            - id: "remove_extra_spaces"
+              enabled: true
+            - id: "remove_urls_emails"
+              enabled: true
+          segmentation:
+            separator: "###"
+            max_tokens: 500 # 最小50，最大1000
+
+# 手动Webhook认证配置
+manual_webhook:
+  auth_token: "your-auth-token"  # 用于手动触发
